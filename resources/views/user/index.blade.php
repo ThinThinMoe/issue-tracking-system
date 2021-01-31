@@ -1,15 +1,19 @@
 <x-app-layout>
     <div class="container mx-auto px-6 py-12">
+        @if(session('success'))
+            <div class="py-4 px-6 mb-3 bg-green-200 border-green-500 rounded-lg">
+                {{ session('success') }}
+            </div>
+        @endif
         <div class="card">
-
             <div class="card-header">
-                <h3 class="font-bold">Developers List</h3>
+                <h3 class="font-bold">Users List</h3>
             </div>
 
             <div class="card-body">
-                <a href="{{ route('developer.create') }}" class="btn btn-primary">Create</a>
+                <a href="{{ route('user.create') }}" class="btn btn-primary">Create</a>
 
-                <!-- Developers List -->
+                <!-- Users List -->
                 <div class="mt-6 shadow overflow-hidden border-b border-gray-200 rounded-lg">
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
@@ -37,7 +41,7 @@
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
 
-                            @forelse ($developers as $developer)
+                            @forelse ($users as $user)
                                 
                             <tr>
                                 <td class="px-6 py-4 whitespace-nowrap">
@@ -49,10 +53,10 @@
                                         </div>
                                         <div class="ml-4">
                                             <div class="text-sm font-medium text-gray-900">
-                                                {{ $developer->name }}
+                                                {{ $user->name }}
                                             </div>
                                             <div class="text-sm text-gray-500">
-                                                {{ $developer->email }}
+                                                {{ $user->email }}
                                             </div>
                                         </div>
                                     </div>
@@ -67,12 +71,19 @@
                                     Admin
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                    <a href="#" class="text-indigo-600 hover:text-indigo-900">Edit</a>
+                                    <a href="{{ route('user.edit', $user->id) }}" class="text-indigo-600 hover:text-indigo-900">Edit</a>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                    <form action="{{ route('user.destroy', $user->id) }}" method="post">
+                                        @csrf
+                                        @method('delete')
+                                        <button type="submit" class="text-red-600 hover:text-red-900">Delete</button>
+                                    </form>
                                 </td>
                             </tr>
                             @empty
                                 <tr>
-                                    <td class="p-6 text-gray-500 text-sm">No Developer.</td>
+                                    <td class="p-6 text-gray-500 text-sm">No User.</td>
                                 </tr>     
                             @endforelse
 
@@ -81,7 +92,7 @@
                 </div>
 
                 <div class="pagination mt-6">
-                    {{ $developers->links() }}
+                    {{ $users->links() }}
                 </div>
 
 

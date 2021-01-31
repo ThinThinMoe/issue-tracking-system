@@ -46,7 +46,7 @@
                             <div class="mt-4">
                                 <h1 class="font-bold text-gray-500">Note</h1>
                                 <div class="border-t pt-2 mb-4">
-                                    <textarea style="width: 100%; max-width: 100%;" rows="4" name="note" id="note"></textarea>
+                                    <textarea class="note-design"rows="4" name="note" id="note"></textarea>
                                 </div>
                             </div>
                         </div> <!-- end issue-detail-content -->
@@ -123,3 +123,9 @@
         </div>
     </div>
 </x-app-layout>
+<style scoped>
+    .note-design {
+        width: 100%;
+        max-width: 100%;
+    }
+</style>

@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Http\Requests\UserRequest;
 
-class DeveloperController extends Controller
+class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,8 +15,8 @@ class DeveloperController extends Controller
      */
     public function index()
     {
-        $developers = User::latest('id')->paginate();
-        return view('developer.index', compact('developers'));
+        $users = User::latest('id')->paginate();
+        return view('user.index', compact('users'));
     }
 
     /**
@@ -25,18 +26,20 @@ class DeveloperController extends Controller
      */
     public function create()
     {
-        //
+        return view('user.create');
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  App\Http\Requests\UserRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    // TODO: rename UserRequest to UserStoreRequest
+    public function store(UserRequest $request)
     {
-        //
+        User::create($request->only('name', 'email', 'password'));
+        return redirect()->route('user.index')->with('success', 'A user was created.');
     }
 
     /**
@@ -56,21 +59,26 @@ class DeveloperController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(User $user)
     {
-        //
+        return view('user.edit', compact('user'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  App\Http\Requests\UserRequest  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, User $user)
     {
-        //
+        // TODO: use request validation named UserUpdateRequest
+        $request->validate(['name' => 'required']);
+        
+        $user->update($request->only('name'));
+
+        return redirect()->route('user.index')->with('success', 'A user was updated.');
     }
 
     /**
@@ -79,8 +87,9 @@ class DeveloperController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(User $user)
     {
-        //
+        $user->delete();
+        return redirect()->route('user.index')->with('success', 'A user was deleted.');
     }
 }
